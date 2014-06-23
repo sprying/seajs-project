@@ -5,14 +5,16 @@
       "grunt": "~0.4.2",
       "grunt-cmd-transport": "~0.3.0",
       "grunt-cmd-concat": "~0.2.5",
-      "grunt-contrib-uglify": "0.2.2",
+      "grunt-cmd-concatcss":"~0.0.1",
+      "grunt-cmd-concatfile":"0.0.1",
+      "grunt-contrib-clean": "~0.4.0",
+      "grunt-contrib-concat":"~0.4.0"
       "grunt-contrib-copy": "~0.4.1",
       "grunt-contrib-cssmin": "~0.9.0",
-      "grunt-contrib-clean": "~0.4.0",
+      "grunt-contrib-imagemin": "~0.7.0",
+      "grunt-contrib-uglify": "0.2.2",
       "grunt-md5": "~0.1.10",
       "spm":"~2.2.5",
-      "grunt-contrib-imagemin": "~0.7.0",
-      "grunt-contrib-concat":"~0.4.0"
   },
     "spm": {
         "alias": {

@@ -1,1 +1,0 @@
-define("modules/dialog/0.0.1/dialog",["./dialog.css"],function(a,b,c){a("./dialog.css"),console.log("dialog.js 来自基础模块的弹出窗组件"),c.exports=function(){},$("body").append($("<div>").addClass("testStyle"))});
