@@ -1,0 +1,5 @@
+@IF EXIST "%~dp0\node.exe" (
+  "%~dp0\node.exe"  "%~dp0\..\grunt-md5\bin\grunt-md5" %*
+) ELSE (
+  node  "%~dp0\..\grunt-md5\bin\grunt-md5" %*
+)

@@ -1,0 +1,1 @@
+define("modules/validator/0.0.1/validator",["./validator.css"],function(a,b,c){a("./validator.css"),console.log("validator.js 我是来自基础模块的校验组件"),c.exports=function(){}});
