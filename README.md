@@ -12,6 +12,8 @@ ys7
     --dialog.js
 ```
 整个项目结构
+
+```
 --Gruntfile.js
 --pagekage.json
 --node-modules/
@@ -35,5 +37,6 @@ ys7
 ------page/share.js
 ------page/share.css
 ------page/imgs/
+```
 
 
