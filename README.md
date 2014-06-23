@@ -10,7 +10,7 @@ ys7
     --imgs
     --dialog.css
     --dialog.js
-```。
+```
 整个项目结构
 --Gruntfile.js
 --pagekage.json
