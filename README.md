@@ -40,7 +40,7 @@
 ------page/imgs/
 ```
 
-合并压缩时，将page依赖的business合并到一起，包括css文件合并成一个，图像文件夹合并成一个。为重复利用缓存，widget基础模块不合并。页面公共的js、css发布时合并成一个文件。
+合并压缩时，将page依赖的business合并到一起，包括css文件合并成一个，图像文件夹合并成一个。为充分利用缓存，widget基础模块不合并。页面公共的js、css发布时合并成一个文件。
 ```
 --Gruntfile.js
 --pagekage.json
