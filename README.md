@@ -7,9 +7,9 @@
 项目里不采用cdn，没采用模块化开发部署，不要采用spm包管理，前后端没分离，js里面要require css，不要使用combo在线合并，组件结构要
 ```
     --dialog/
-    --imgs
-    --dialog.css
-    --dialog.js
+    --dialog/imgs
+    --dialog/dialog.css
+    --dialog/dialog.js
 ```
 在上面这些要求下，于是乎我就想了一套方案，兼顾版本控制、开发与生产模式切换。当然没有张云龙的架构高大上。
 
