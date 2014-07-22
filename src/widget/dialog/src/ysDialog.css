@@ -1,0 +1,252 @@
+﻿body{
+    font-family: 'Microsoft Yahei', Arial, Simsun, sans-serif;
+}
+/*container*/
+#ys-window{
+	background:#fff;overflow:hidden;
+	font-size:12px;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    *border: 1px solid #999;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+
+    -moz-user-select: none; /*火狐*/
+    -webkit-user-select: none;  /*webkit浏览器*/
+    -ms-user-select: none;   /*IE10*/
+    -khtml-user-select: none; /*早期浏览器*/
+    user-select: none;
+
+}
+
+/*header*/
+.ys-tl{}
+.ys-tr{}
+.ys-tc{
+    height: 19px;
+    line-height: 19px;
+    padding: 5px 10px;
+    background: #f4f4f4;
+}
+.ys-ttc{height:3px}
+.ys-header-text{
+    color:#6d6e71;
+    margin-left:5px;
+    float:left;
+    height: 19px;
+	line-height: 18px;
+	font-size: 14px;
+	font-weight: normal;
+}
+.ys-header-tools{float:right;margin-top:1px;opacity: 0.4;
+    filter: alpha(opacity=40);}
+
+
+/*body*/
+.ys-ml{}
+.ys-mr{}
+.ys-mc{}
+.ys-body{overflow:auto;padding:0;font-size:12px;}
+
+/*button*/
+.ys-btn{text-align:right;padding-right: 22px;}
+
+/*footer*/
+.ys-bl{}
+.ys-br{}
+.ys-bc{}
+
+/*icon*/
+.ysDialog_warn{
+    padding-left:70px;
+    padding-right: 10px;
+    background:url(imgs/hint_warn.png) no-repeat 20px 50%
+}
+.ysDialog_succeed{
+	padding-left:70px;
+    padding-right: 10px;
+	background:url(imgs/hint_success.png) no-repeat 20px 50%
+}
+.ysDialog_tip{
+    padding-left:70px;
+    padding-right: 10px;
+    background:url(imgs/share-tip.png) no-repeat 20px 50%
+}
+.ysDialog_error{
+	padding-left:70px;
+    padding-right: 10px;
+	background:url(imgs/hint_error.png) no-repeat 20px 50%
+}
+.ys-content{
+    padding: 15px;
+    color: #6d6e71;
+	font-size: 13px;
+}
+.ys-content .topPrompt{
+	margin: 0 0 10px 0;
+}
+.passError{
+	color: #e1593b;
+	padding-left: 22px;
+	background: url(../src/imgs/icon.png) no-repeat -13px -9px;
+	display: none;
+	line-height: 19px;
+}
+.show{
+	display:block;
+}
+.ysDialog_alert .ys-content,.ysDialog_confirm .ys-content{padding:50px 0 0}
+.ysDialog_warn .ys-content,.ysDialog_succeed .ys-content,.ysDialog_error .ys-content,.ysDialog_tip .ys-content{padding:22px 0 0}
+/*图标公共定义*/
+/*图标公共定义*/
+.ys-header-tools div{
+    cursor:pointer;
+    width:16px;height:16px;float:left;margin:0 1px;
+}
+
+.ys-header-tools strong{
+    /*font-family:webdings!important;*/
+    font-size: 14px;
+}
+
+/*取消确认按钮样式*/
+input.btnStyle{
+    padding: 3px 0 3px 0;
+    /*letter-spacing: 5px;*/
+    color: #6d6e71;
+    width:80px;
+    /*line-height:18px;*/
+	/*font-size:12px;*/
+    margin:-7px 0 20px;
+    border-color: #ccc;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+
+.btnStyle {
+    display: inline-block;
+    *display: inline;
+    padding: 4px 10px 4px;
+    margin-bottom: 0;
+    *margin-left: .3em;
+    font-size: 13px;
+    line-height: 18px;
+    *line-height: 20px;
+    color: #333333;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: #f5f5f5;
+    *background-color: #e6e6e6;
+    background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+    background-repeat: repeat-x;
+    border: 1px solid #cccccc;
+    *border: 0;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+    border-bottom-color: #b3b3b3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+    filter: progid:dximagetransform.microsoft.gradient(enabled='false');
+    *zoom: 1;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btnStyle:hover,
+.btnStyle:active,
+.btnStyle.active,
+.btnStyle.disabled,
+.btnStyle[disabled] {
+    background-color: #e6e6e6;
+    *background-color: #d9d9d9;
+}
+
+.btnStyle:active,
+.btnStyle.active {
+    background-color: #cccccc \9;
+}
+
+.btnStyle:first-child {
+    *margin-left: 0;
+}
+
+.btnStyle:hover {
+    color: #333333;
+    text-decoration: none;
+    background-color: #e6e6e6;
+    *background-color: #d9d9d9;
+    /* Buttons in IE7 don't get borders, so darken on hover */
+
+    background-position: 0 -15px;
+    -webkit-transition: background-position 0.1s linear;
+    -moz-transition: background-position 0.1s linear;
+    -ms-transition: background-position 0.1s linear;
+    -o-transition: background-position 0.1s linear;
+    transition: background-position 0.1s linear;
+}
+
+.btnStyle:focus {
+    outline: thin dotted #333;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.btnStyle.active,
+.btnStyle:active {
+    background-color: #e6e6e6;
+    background-color: #d9d9d9 \9;
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btnStyle.disabled,
+.btnStyle[disabled] {
+    cursor: default;
+    background-color: #999;
+    background-image: none;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+/* =S 密码弹出框 */
+#ys-window .diaPassText{
+    float: left;
+    height: 28px;
+    line-height: 28px;
+    display:inline-block;
+}
+#ys-window .diaPass{
+    width: 244px;
+    float: left;
+}
+#ys-window  .passError{
+    margin-left: 39px;
+}
+/* =E 密码弹出框 */
+
+.ysDialog_warn .ys-content{
+    line-height: 1.6;
+}

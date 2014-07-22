@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../../common/scripts/head/jquery-1.9.1.js"></script>
+    <script src="../../../common/scripts/footer/sea.js"></script>
+    <script src="../../../common/scripts/head/base.js"></script>
+    <script src="../../../common/scripts/head/util.js"></script>
+    <script src="../../../seaConfig.js"></script>
+</head>
+<body>
+<div id="btnHolder">
+    <button id="customTcc">自定义弹出窗</button>
+    <button id="warnTcc">警告弹出窗</button>
+    <button id="successTcc">成功弹出窗</button>
+    <button id="errorTcc">错误弹出窗</button>
+    <button id="tipTcc">提示弹出窗</button>
+    <div>
+        ysDialog.win(config);
+        <p>config.title default '标题' 弹出框标题</p>
+        <p>config.content default '内容'</p>
+        <p>config.width default 300 宽度</p>
+        <p>config.height default 185 高度</p>
+        <p>config.winPos default 'c' 弹出框位置</p>
+        <p>config.showMask default true 是否显示遮罩</p>
+        <p>config.maskAlpha default '0.1' 遮罩的透明度</p>
+        <p>config.msgCls default 'ys-content' 消息框内容的class名称，用于自定义样式</p>
+        <p>config.okTxt default '确定' 确定按钮提示文字</p>
+        <p>config.cancelTxt default '取消' 取消按钮的提示文本</p>
+        <p>config.disableDrag default false 是否禁止拖动弹出层，默认否</p>
+    </div>
+</div>
+<script>
+    seajs.config({
+        base:'../../../'
+    });
+    seajs.use('dialog',function(ysDialog){
+        window.ysDialog = ysDialog;//为了测试
+        // 事件委托
+        $('#btnHolder').on('click',function(e){
+            var $e = $(e.target);
+            switch ($e.attr('id')){
+                case 'customTcc':
+                    ysDialog.win({
+                        content:'<button id="definedHtml">点击弹出框</button>' +
+                                '<div><input type="text"></div>' +
+                                '<div><textarea></textarea></div>',
+                        title: '设备验证码',
+                        width: 360,
+                        height: 337,
+                        noHeight:true,
+                        btn:[['确定','ok'],['取消','cancel']],// btn:['OK','CANCEL']
+                        handler:function(type){
+                            console.log(type);
+                        },
+                        afterHandler:function(){
+                            console.log('关闭弹出框之后');
+                        },
+                        contentBind:function(){
+                            $('#definedHtml').on('click',function(){
+                                ysDialog.warn('系统未知错误');
+                            });
+                        }
+
+                    });
+                    break;
+                case 'warnTcc':
+                    ysDialog.warn('<span style="font-size: 15px;">警告</span>');
+                    break;
+                case 'successTcc':
+                    ysDialog.succeedInfo('操作成功操作成功操作成功操作成功操作成功');
+                    break;
+                case 'errorTcc':
+                    ysDialog.errorInfo({
+                        content:'操作失败'
+                    });
+                    break;
+                case 'tipTcc':
+                    ysDialog.tip('操作成功，将发送短信...');
+                    break;
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,17 +1,58 @@
-var temp = [];
 module.exports = function (grunt) {
-    var transport = require('grunt-cmd-transport');
-    var style = transport.style.init(grunt);
-    var text = transport.text.init(grunt);
-    var script = transport.script.init(grunt);
     var path = require('path');
-    var zlib = require('zlib');
-    var fs = require('fs');
 
     var MAP_TPL = grunt.file.read(path.join(__dirname, 'map.tpl'));
+    var MAP_TPL2 = grunt.file.read(path.join(__dirname, 'map2.tpl'));
 
+    grunt.registerMultiTask('beginWidget',function(){
+        if(!this.data.dirs){
+            grunt.log.warn('Missing config file option');
+            return;
+        }
+        var cache = [],me =this;
+        if(grunt.file.isDir(this.data.dirs)){
+            var tasksdir = path.normalize(path.join(__dirname,this.data.dirs));
+            var files = grunt.file.glob.sync('*', {cwd: tasksdir, maxDepth: 1});
+            var pre_pwd = process.cwd();
+            var file;
+            function loop(file){
+                if(!file) return;
+                var root = path.join(tasksdir, file);
+                var inner_grunt = require(path.normalize(path.join(__dirname,'node_modules/grunt/lib/grunt')));
+                grunt.file.setBase(root);
+                inner_grunt.loadNpmTasks = function(){};
+                inner_grunt.tasks('default', {npm:[],tasks:[]}, function(){
+                    grunt.file.setBase(pre_pwd);
+                    var file = files.shift();
+                    if(file){
+                        loop(file);
+                    }else{
+                        var mapObj = {};
+                        cache.forEach(function(item){
+                            mapObj[item[0]] =  item[1];
+                        });
+                        var code = grunt.template.process(MAP_TPL2, {data : {mapJSON : JSON.stringify(mapObj, null, '\t')}}) + '\n';
+                        grunt.file.write(path.normalize(path.join(pre_pwd,'asset',me.data.filename).replace(/\\/g,'/')),code);
+
+                    }
+                });
+                var pkg = inner_grunt.config('pkg');
+                var files1 = inner_grunt.file.glob.sync('*.js', {cwd: path.join(tasksdir,file,'src'), maxDepth: 1});
+                files1.forEach(function(item){
+                    cache.push([path.basename(item).match(/(.*)\.js/)[1],pkg.family+'/'+pkg.name+'/'+pkg.version+'/'+path.basename(item)]);
+                });
+            }
+            var sortObj = this.data.sortObj;
+            files.sort(function(prev,next){
+                sortObj[prev] || (sortObj[prev] = 100);
+                sortObj[next] || (sortObj[next] = 100);
+                return sortObj[prev] - sortObj[next];
+            });
+            loop(file = files.shift());
+        }
+    });
     // add md5-map to seajs config
-    grunt.registerMultiTask('modifyConfig', function () {
+    grunt.registerMultiTask('modify-config', function () {
         if (!this.data.filename) {
             grunt.log.warn('Missing config file option.');
             return;
@@ -45,17 +86,28 @@ module.exports = function (grunt) {
     });
     grunt.initConfig({
         pkg : grunt.file.readJSON("package.json"),
+        beginWidget:{
+            dist:{
+                dirs:'./src/widget',
+                sortObj:{
+                    underscore:1,
+                    backbone:2,
+                    up:3
+                },
+                filename:'seaConfig.js'
+            }
+        },
         ctrconcat:{
-            base:{
+            common:{
                 files:[{
-                    src:['./src/css/reset.css','./src/css/base.css','./src/css/animate.css','./src/css/v2style.css','./src/css/inc_topnav.css','./src/css/header.css','./src/css/v2misc.css','./src/css/inc_socket.css','./src/css/footer.css'],
-                    dest:'.build/css/out_common.css'
+                    src:['./src/common/css/reset.css','./src/common/css/font-awesome.css'],
+                    dest:'.build/common/css/out_common.css'
                 },{
-                    src:'./src/base/*.js',
-                    dest:'.build/base/out_footer.js'
+                    src:'./src/common/js/bottom/*.js',
+                    dest:'.build/common/js/bottom/out_footer.js'
                 },{
-                    src:['./src/base/jquery-1.9.1.js','./src/base/json2.js','./src/base/util.js','./src/base/base.js','./src/base/inc_topnav.js','./src/base/jquery.cookie.js','./src/base/socket.io.js','./src/base/weibo.js'],
-                    dest:'.build/common/scripts/head/out_head.js'
+                    src:['./src/common/js/top/jquery-1.9.1.js','./src/common/js/top/jquery-migrate.js','./src/common/js/top/json2.js'],
+                    dest:'.build/common/js/top/out_top.js'
                 }]
             }
         },
@@ -63,7 +115,7 @@ module.exports = function (grunt) {
             options : {
                 alias: '<%= pkg.spm.alias %>',
                 debug:false,
-                paths:['src']
+                paths:['./asset']
             },
 
             page : {
@@ -71,7 +123,7 @@ module.exports = function (grunt) {
                     idleading : 'page/'
                 },
                 files : [
-                {
+                    {
                         cwd : './src/page/',
                         src : ['**/*.js'],
                         filter : 'isFile',
@@ -89,23 +141,12 @@ module.exports = function (grunt) {
                     filter : 'isFile',
                     dest : '.build/business/'
                 } ]
-            },
-            widget:{
-                options : {
-                    idleading : 'widget/'
-                },
-                files:[{
-                    cwd : './src/widget/',
-                    src : ['**/*.js'],
-                    filter : 'isFile',
-                    dest : '.build/widget/'
-                } ]
             }
-         },
+        },
         concat : {
             options : {
                 include : 'relative',
-                paths:['src']
+                paths:['./asset']
             },
             page : {
                 files: [
@@ -123,7 +164,7 @@ module.exports = function (grunt) {
                 include: 'relative',
                 paths:['src']
             },
-            app: {
+            page: {
                 files: [
                     {
                         expand: true,
@@ -165,16 +206,19 @@ module.exports = function (grunt) {
                 files:[
                     {
                         expand: true,
-                        cwd: '.build/widget/',
-                        src: ['**/*.js','!**/*-debug.js','!**/*-debug.css.js'],
-                        dest: './assets/widget'
-                    },{
-                        expand: true,
-                        cwd: './src/base/',
+                        cwd: './src/common/',
                         src: ['**/*.js'],
-                        dest: './assets/base'
+                        dest: './asset/common'
                     }
                 ]
+            },
+            common:{
+                files:[{
+                    expand:true,
+                    cwd:'./.build/common/',
+                    src:['**/*.js'],
+                    dest:'./asset/common/'
+                }]
             }
         },
         md5:{
@@ -186,38 +230,50 @@ module.exports = function (grunt) {
                     var map = [];
                     fileChanges.forEach(function (obj) {
                         obj.oldPath = obj.oldPath.replace('.build/uglify/', '');
-                        obj.newPath = obj.newPath.replace('assets/html' + '/', '');
+                        obj.newPath = obj.newPath.replace('asset/page' + '/', '');
                         var temp = 'page/'+obj.oldPath;
                         temp = temp.substring(0,temp.length-3);
                         map.push([temp, 'page/'+obj.newPath]);
                     });
-                    temp = temp.concat(map);
                     grunt.config.set('md5map', map);
                 }
             },
-            page : {
+            js : {
                 files : [
                     {
                         expand : true,     // Enable dynamic expansion.
                         cwd : '.build/uglify',      // Src matches are relative to this path.
                         src : ['**/*.js','!**/*.css.js'], // Actual pattern(s) to match.
-                        dest : 'assets/page'   // Destination path prefix.
+                        dest : 'asset/page'   // Destination path prefix.
                     }
                 ]
             }
         },
-        imagemin: {
+        "imagemin": {
             /* 压缩图片大小 */
-            app: {
+            page: {
                 options: {
                     optimizationLevel: 3 //定义 PNG 图片优化水平
                 },
                 files: [{
                     expand: true,
-                    cwd: '.build/apps',
+                    cwd: '.build/page',
                     src: ['**/*.{png,jpg,jpeg}'], // 优化 img 目录下所有 png/jpg/jpeg 图片
-                    dest: 'assets/apps' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
-                }]
+                    dest: 'asset/page' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
+                }
+                ]
+            },
+            common:{
+                options: {
+                    optimizationLevel: 3 //定义 PNG 图片优化水平
+                },
+                files: [{
+                    expand: true,
+                    cwd: './src',
+                    src: ['common/**/*.{png,jpg,jpeg}'], // 优化 img 目录下所有 png/jpg/jpeg 图片
+                    dest: 'asset' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
+                }
+                ]
             },
             other:{
                 options: {
@@ -226,69 +282,104 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: './src',
-                    src: ['**/*.{png,jpg,jpeg}','!apps/**/*.{png,jpg,jpeg}','!components/**/*.{png,jpg,jpeg}'], // 优化 img 目录下所有 png/jpg/jpeg 图片
-                    dest: 'assets' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
-                }]
+                    src: ['**/*.{png,jpg,jpeg}','!page/**/*.{png,jpg,jpeg}','!business/**/*.{png,jpg,jpeg}','!widget/**/*.{png,jpg,jpeg}'], // 优化 img 目录下所有 png/jpg/jpeg 图片
+                    dest: 'asset' // 优化后的图片保存位置，覆盖旧图片，并且不作提示
+                }
+                ]
             }
         },
-        cssmin:{
-             app:{
+        "cssmin":{
+            page:{
                 files:[{
                     cwd: '.build/concat',
                     src: ['**/*.css'],
                     expand: true,
-                    dest: 'assets/apps'
+                    dest: 'asset/page'
                 }]
             },
             other:{
                 files:[{
                     cwd: './src',
-                    src: ['**/*.css','!apps/**/*.css','!components/**/*.css'],
+                    src: ['**/*.css','!page/**/*.css','!business/**/*.css','!widget/**/*.css'],
                     expand: true,
-                    dest: './assets'
+                    dest: './asset'
                 }]
+            },
+            common:{
+                cwd: '.build/common/css',
+                src: ['**/*.css'],
+                expand: true,
+                dest: 'asset/common/css'
             }
         },
-        copy:{
+        "copy":{
             fromTo:{
-                files:[{
-                    cwd: './src',
-                    src: ['page/**/*.css','page/**/*.{png,jpg,jpeg}'],
-                    expand: true,
-                    dest: '.build'
-                },{
+                files:[
+                    {
                         cwd: './src',
                         src: ['business/**/*.css','business/**/*.{png,jpg,jpeg}'],
                         expand: true,
                         dest: '.build'
+                    },{
+                        cwd: './src',
+                        src: ['page/**/*.css','page/**/*.{png,jpg,jpeg}'],
+                        expand: true,
+                        dest: '.build'
+                    }                ]
+            },
+            css:{
+                files:[{
+                    cwd: '.build/concat',
+                    src: '**/*.css',
+                    expand: true,
+                    dest: './asset/page'
                 }]
             }
         },
-        modifyConfig : {
+        "modify-config" : {
             target : {
-                filename : 'seaConfig.js'
+                filename : 'asset/seaConfig.js'
             }
         },
         clean : {
             spm : ['.build'],
-            dist:['assets']
+            dist:['asset/*','!asset/widget','!asset/seaConfig.js'],
+            widget:['asset/widget']
         }
     });
 
+    grunt.loadNpmTasks('grunt-cmd-transport');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.task.renameTask('concat','ctrconcat');
-    grunt.loadNpmTasks('grunt-cmd-transport');
     grunt.loadNpmTasks('grunt-cmd-concat');
-    grunt.loadNpmTasks('grunt-cmd-concatFile');
-    grunt.loadNpmTasks('grunt-cmd-concatCss');
+    grunt.loadNpmTasks('grunt-cmd-concatfile');
+    grunt.loadNpmTasks('grunt-cmd-concatcss');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-md5');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.registerTask('build-all', ['clean:spm','clean:dist','ctrconcat:base','uglify:base','cssmin:css','imagemin:img','transport:page','transport:business','copy:fromTo','concatCss:page', 'concat:page','concatFiles:page', 'uglify:page','md5:page','cssmin:page','imagemin:page','modifyConfig']);
+
+    grunt.registerTask('build-all', ['clean:spm','clean:dist','ctrconcat:common','uglify:common','cssmin:common','imagemin:common','uglify:other','transport:page','transport:business','copy:fromTo','concatCss:page', 'concat:page','concatFiles:page', 'uglify:page','md5:js','cssmin:page','imagemin:page','modify-config']);
+    /*1.清空：.build
+     * 2.清空asset
+     * 3.合并common下指定的css和js
+     * 4.压缩common下的指定的js
+     * 5.压缩common下指定的css
+     * 6.压缩common下所有图片
+     * 7.压缩common下所有的js
+     * 8.标准化page目录下页面模块
+     * 9.标准化business目录下业务模块
+     * 10.拷贝page和business下css和图片，以协同作下一步处理
+     * 11.合并page依赖的business下的css文件，到page下css文件中
+     * 12.合并page依赖的business下的js文件
+     * 13.合并page依赖的business下的图片文件夹
+     * 14.压缩合并的js
+     * 15.根据合并后js的md5值，重命令js文件，解决缓存问题
+     * 16.压缩合并的css
+     * 17.压缩合并的imgs文件夹
+     * 18.修改seaConfig.js配置文件*/
+
     grunt.registerTask('build-widget', ['clean:widget','beginWidget:dist']);
-    grunt.registerTask('build-all', ['clean:spm','clean:dist','transport:other','uglify:other','cssmin:other','imagemin:other','transport:app','transport:appComponent','copy:fromTo','concatCss:app', 'concat:app','concatFiles:app', 'uglify:min','md5:js','cssmin:app','imagemin:app','modify-config']);
 };

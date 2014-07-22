@@ -1,0 +1,68 @@
+@CHARSET "UTF-8";
+.left-nav {
+	width: 190px;
+	float: left;
+}
+.left-nav a:hover {
+	text-decoration: none;
+}
+.left-nav li {
+	height: 116px;
+}
+.left-nav li.active {
+	background: url("../../imgs/leftnav_li_bg.png") no-repeat center center;
+}
+.left-nav .desc {
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	color: #797979;
+}
+.left-nav .name {
+	font-size: 14px;
+}
+li.active .name {
+	color: #d73003;
+}
+.left-nav .number {
+	font-size: 12px;
+}
+.left-nav li i {
+	width: 53px;
+	height: 53px;
+	margin-left: 68px;
+	margin-top: 17px;
+}
+
+.left-nav li i.icon-real {
+	background: url("../../imgs/icons/icon_real.png") no-repeat center center;
+}
+
+.left-nav li.active i.icon-real {
+	background: url("../../imgs/icons/icon_real_act.png") no-repeat center center;
+}
+.left-nav li i.icon-square {
+    background: url("../../imgs/icons/icon_square.png") no-repeat center center;
+}
+.left-nav li i.icon-pic {
+	background: url("../../imgs/icons/icon_pic.png") no-repeat center center;
+}
+
+.left-nav li.active i.icon-pic {
+	background: url("../../imgs/icons/icon_pic_act.png") no-repeat center center;
+}
+
+.left-nav li i.icon-cloud-img {
+	background: url("../../imgs/icons/icon_cloud_img.png") no-repeat center center;
+}
+.left-nav li i.icon-videoSquare-img {
+	background: url("../../imgs/icons/videoSquare.png") no-repeat center center;
+}
+.left-nav li.active i.icon-cloud-img {
+	background: url("../../imgs/icons/icon_cloud_img_act.png") no-repeat center center;
+}
+
+.setting {
+    background: none repeat scroll 0 0 #F8F7F7 !important;
+    margin-top: 5px;
+}

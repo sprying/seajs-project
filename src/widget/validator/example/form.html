@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+         .text-left{
+             float: left;
+         }
+         input{
+             margin-left:100px ;
+             display: block;
+         }
+        label.error{
+            display: block;
+            margin:5px 0 5px 100px ;
+            color: red;
+        }
+        .tip{
+            margin:5px 0 5px 100px ;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<form id="shareForm">
+    <label for="telNO" class="text-left">手机号码:</label>
+    <input type="text" id="telNO" name="telNO"/>
+    <label class="tip">请输入手机号码</label>
+    <label for="name1" class="text-left">备注:</label><input type="text" id="name1" name="name1"/>
+    <label class="tip">xxxxx</label>
+    <input type="submit" value="提交"/>
+</form>
+<script src="../../../common/scripts/head/jquery-1.9.1.js"></script>
+<script src="../../../common/scripts/footer/sea.js"></script>
+<script>
+    seajs.config({
+        base:'/WebRoot/src'
+    });
+    seajs.use('../src/ys_validator.js',function(ysDialog){
+        $('#shareForm').validate({
+            rules: {
+                telNO: {
+                    required: true,
+                    number: true,
+                    equalNum: 11,
+                    phone: true
+                },
+                name1: {
+                    minlength: 2,
+                    nameRule: true,
+                    notEq: '你好',
+                    remote: {
+                        url: './remote.json',
+                        type: "post",
+                        data: {
+                            telNO: function() {
+                                return $( "#telNO" ).val();
+                            }
+                        },
+                        handler:function(data){
+                            return '输入的'+data+'错误'
+                        }
+                    }
+
+                }
+            },
+            submitHandler: function (form) {
+                console.log('校验成功');
+                 return false;
+            }
+        });
+    });
+</script>
+</body>
+</html>
