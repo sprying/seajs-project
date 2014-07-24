@@ -106,7 +106,8 @@ module.exports = function (grunt) {
                     src:'./src/common/js/bottom/*.js',
                     dest:'.build/common/js/bottom/out_footer.js'
                 },{
-                    src:['./src/common/js/top/jquery-1.9.1.js','./src/common/js/top/jquery-migrate.js','./src/common/js/top/json2.js'],
+                    src:['./src/common/js/top/jquery-1.9.1.js','./src/common/js/top/jquery-migrate.js',
+                        './src/common/js/top/json2.js','./src/common/js/top/util.js','./src/common/js/top/base.js'],
                     dest:'.build/common/js/top/out_top.js'
                 }]
             }

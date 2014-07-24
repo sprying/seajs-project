@@ -6,15 +6,20 @@
     <script>
         var production = true;
     </script>
-    <script src="../src/base/jquery.js"></script>
+    <script src="../src/common/js/top/jquery-1.9.1.js"></script>
+    <script src="../src/common/js/top/json2.js"></script>
+    <script src="../src/common/js/top/jquery.cookie.js"></script>
+    <script src="../src/common/js/top/socket.io.js"></script>
+    <script src="../src/common/js/top/jquery-migrate-1.2.1.js"></script>
+    <script src="../src/common/js/top/util.js"></script>
+    <script src="../src/common/js/top/base.js"></script>
 </head>
 <body>
 
-<script src="../src/base/sea.js"></script>
-<script src="../src/base/seajs-style.js"></script>
-<script src="../seaConfig.js"></script>
+<script src="../src/common/js/bottom/sea.js"></script>
+<script src="../src/seaConfig.js"></script>
 <script type="text/javascript">
-    seajs.use(seajs.production?'apps/test/appTest':'../src/apps/test/appTest');
+    seajs.use('page/test/appTest');
 </script>
 </body>
 </html>

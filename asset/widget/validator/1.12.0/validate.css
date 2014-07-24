@@ -1,0 +1,8 @@
+form.validator{
+    position: relative;
+}
+.validator span.success {
+    background: url(./imgs/icon.png) no-repeat -13px -28px;
+    width: 18px;
+    height: 17px;
+}
