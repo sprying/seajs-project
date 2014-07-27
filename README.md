@@ -66,5 +66,5 @@
 4. 针对js、css、图片进行压缩，减少资源请求大小。
 5. 很方便切换构建之前与之后。开发过程中引用所有未合并压缩的资源，方便调试。
 
-[更多](sprying.github.io/javascript/2014/07/27/seajs模块化开发的合并与压缩)
+[更多](http://sprying.github.io/javascript/2014/07/27/seajs模块化开发的合并与压缩)
 
