@@ -27,9 +27,6 @@ module.exports = function (grunt) {
                      expand: true,
                      cwd: '.build',
                      src: '**/*.js',
-                     filter: function(filepath) {
-                         return !/-debug\.js$/.test(filepath);
-                     },
                      dest: '.tmp2'
                  }]
              }
@@ -40,12 +37,25 @@ module.exports = function (grunt) {
                      expand: true,
                      cwd: '.tmp2',
                      src: '**/*.js',
+                     filter: function(filepath) {
+                         return !/-debug\.js$/.test(filepath);
+                     },
                      dest: 'dist'
                  }]
              }
          },
 
-        "copy":{
+        copy:{
+			concatjs:{
+				files:[
+					{
+						cwd:'./.build',
+						src:['**/*-debug.js'],
+						expand:true,
+						dest:'dist'
+					}
+				]
+			},
             imgCss:{
                 files:[
                     {
@@ -77,5 +87,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.registerTask('default', [ 'clean:dist','transport', 'concat', 'uglify','copy:imgCss','copy:deploy','clean:spm']);
+    grunt.registerTask('default', [ 'clean:dist','transport', 'concat', 'uglify','copy:imgCss','copy:concatjs','copy:deploy']);
 };
