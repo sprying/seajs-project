@@ -115,7 +115,7 @@ module.exports = function (grunt) {
         transport : {
             options : {
                 alias: '<%= pkg.spm.alias %>',
-                debug:false,
+                debug: true,
                 paths:['./asset']
             },
 
