@@ -2,7 +2,7 @@
 ===
 
 
-###合并压缩前
+合并压缩前
 
 ```
 --Gruntfile.js	--打包脚本
@@ -36,14 +36,14 @@
 ------widget/dialog/src/imgs
 ```
 
-###构建步骤
+构建步骤
 ```
 npm install
 grunt build-widget
 grunt build-page
 ```
 
-###合并压缩后
+合并压缩后
 ```
 ......
 --asset
@@ -66,7 +66,7 @@ grunt build-page
 ```
 合并压缩时，将page依赖的business合并到一起，包括css、图像文件夹。
 
-###开发使用注意
+开发使用注意
 page、business、widget的文件夹里只能放一级功能目录，
 
     --page
