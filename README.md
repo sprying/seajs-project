@@ -35,6 +35,14 @@
 ------widget/dialog/src/dialog.css
 ------widget/dialog/src/imgs
 ```
+
+构建过程
+```
+npm install
+grunt build-widget
+grunt build-page
+```
+
 合并压缩后
 
 ```

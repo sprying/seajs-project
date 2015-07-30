@@ -1,2 +1,3 @@
-/src/widget/dialog/doc
 .svn
+.idea
+node_modules

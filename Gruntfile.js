@@ -1,8 +1,20 @@
 module.exports = function (grunt) {
     var path = require('path');
 
-    var MAP_TPL = grunt.file.read(path.join(__dirname, 'map.tpl'));
-    var MAP_TPL2 = grunt.file.read(path.join(__dirname, 'map2.tpl'));
+    var MAP_TPL = '/*map start*/\
+	seajs.production = true;\
+	if(seajs.production){\
+	    seajs.config({\
+		alias : <%= mapJSON %>\
+	    });\
+	}\
+	/*map end*/';
+    var MAP_TPL2 = '/*map2 start*/\
+	seajs.config({\
+	    alias : <%= mapJSON %>,\
+	    base : "/asset"\
+	});\
+	/*map2 end*/';
 
     grunt.registerMultiTask('beginWidget',function(){
         if(!this.data.dirs){
@@ -362,7 +374,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('build-all', ['clean:spm','clean:dist','ctrconcat:common','uglify:common','cssmin:common','imagemin:common','uglify:other','transport:page','transport:business','copy:fromTo','concatCss:page', 'concat:page','concatFiles:page', 'uglify:page','md5:js','cssmin:page','imagemin:page','modify-config']);
+    grunt.registerTask('build-page', ['clean:spm','clean:dist','ctrconcat:common','uglify:common','cssmin:common','imagemin:common','uglify:other','transport:page','transport:business','copy:fromTo','concatCss:page', 'concat:page','concatFiles:page', 'uglify:page','md5:js','cssmin:page','imagemin:page','modify-config','clean:spm']);
     /*1.清空：.build
      * 2.清空asset
      * 3.合并common下指定的css和js
