@@ -85,17 +85,6 @@ module.exports = function (grunt) {
         grunt.log.writeln('File "' + this.data.filename + '" modified.');
     });
 
-    grunt.registerMultiTask('spm-newline', function () {
-        grunt.file.recurse(this.data.dist, function (f) {
-            var extname = path.extname(f);
-            if (extname === '.js' || extname === '.css') {
-                var text = grunt.file.read(f);
-                if (!/\n$/.test(text)) {
-                    grunt.file.write(f, text + '\n');
-                }
-            }
-        });
-    });
     grunt.initConfig({
         pkg : grunt.file.readJSON("package.json"),
         beginWidget:{
@@ -374,8 +363,32 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('build-page', ['clean:spm','clean:dist','ctrconcat:common','uglify:common','cssmin:common','imagemin:common','uglify:other','transport:page','transport:business','copy:fromTo','concatCss:page', 'concat:page','concatFiles:page', 'uglify:page','md5:js','cssmin:page','imagemin:page','modify-config','clean:spm']);
-    /*1.清空：.build
+    /*
+     *
+     --src
+     -----widget
+     -----------dialog
+     -----------dialog/src
+     -----------dialog/package.json --版本信息等
+     -----------dialog/Gruntfile.js --打包脚本
+     -----------dialog/examples  --组件使用demo
+
+     将功能块js合并压缩后，生成带版本的路径到seajs别名配置表中，其它js直接require别名。
+
+     --asset
+     --seaConfig.js --在配置文件中加入别名
+     "dialog": "widget/dialog/0.0.1/dialog.js",
+     -----widget
+     -----------dialog
+     -----------dialog/0.0.1 --版本号
+     -----------dialog/0.0.1/dialog.js
+     -----------dialog/0.0.1/dialog.css
+     -----------dialog/0.0.1/imgs
+     */
+    grunt.registerTask('build-widget', ['clean:widget','beginWidget:dist']);
+
+    /*
+     * 1.清空.build
      * 2.清空asset
      * 3.合并common下指定的css和js
      * 4.压缩common下的指定的js
@@ -383,16 +396,27 @@ module.exports = function (grunt) {
      * 6.压缩common下所有图片
      * 7.压缩common下所有的js
      * 8.标准化page目录下页面模块
+     *
+     *      标准化transport:
+     *      所有按照seajs模块化开发的js，transport成amd规范的格式，后面可放心压缩。
+     *      要注意路径配置，容易出现使用合并压缩后的代码，资源加载了，却找不到执行路径。
+     *
      * 9.标准化business目录下业务模块
      * 10.拷贝page和business下css和图片，以协同作下一步处理
      * 11.合并page依赖的business下的css文件，到page下css文件中
      * 12.合并page依赖的business下的js文件
+     *
+     *      合并
+     *      任意的js可以合并， 当初的合并想法从seajs的spm来的，仅指页面级的js合并其它js，不包括widget组件间的合并。
+     *      页面级Js开始解析依赖合并，只合并require相对路径的js，设置别名的依赖不合并。
+     *
      * 13.合并page依赖的business下的图片文件夹
      * 14.压缩合并的js
-     * 15.根据合并后js的md5值，重命令js文件，解决缓存问题
+     * 15.根据合并后js的md5值，重命名js文件，解决缓存问题
      * 16.压缩合并的css
      * 17.压缩合并的imgs文件夹
-     * 18.修改seaConfig.js配置文件*/
+     * 18.修改seaConfig.js配置文件
+     * */
+    grunt.registerTask('build-page', ['clean:spm','clean:dist','ctrconcat:common','uglify:common','cssmin:common','imagemin:common','uglify:other','transport:page','transport:business','copy:fromTo','concatCss:page', 'concat:page','concatFiles:page', 'uglify:page','md5:js','cssmin:page','imagemin:page','modify-config','clean:spm']);
 
-    grunt.registerTask('build-widget', ['clean:widget','beginWidget:dist']);
 };
